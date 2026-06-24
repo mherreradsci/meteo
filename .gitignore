@@ -1,0 +1,34 @@
+# Entornos virtuales
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Caché de API (Open-Meteo)
+data/cache/
+
+# Datos pesados (GeoJSON se puede regenerar con scripts/descargar_comunas.py)
+data/comunas_chile.geojson
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Archivos de credenciales
+.cdsapirc
+*.env
+.env
+
+# Archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/settings.json
+.idea/
+*.swp

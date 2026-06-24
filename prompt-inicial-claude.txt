@@ -1,0 +1,139 @@
+Necesito hacer un proyecto que me permita buscar en Chile,localidades estan con rangos de temperatura entre "x" e "y". Esto con el fin de buscar territorios donde poder instalar un proyecto de piscicultura + aquaponía:
+
+## Parámetros de entrada: 
+	* Localización por comuna
+		* Código de la comuna, 
+		* Nombre de la localidad
+	* Localización por coordenadas geográficas
+		* Lista de coordenadas de un poligono
+	* Fecha de inicio
+	* Fecha de término
+
+## Salida:
+	* Gráfico con Temperatura Mínima, Temperatura Máxima, Promedio
+	* Gráfico territorial utilizando OpenStreetMap dnde mostrar las temperaturas
+
+
+# Inicio: 20260623
+
+❯ /context
+  ⎿  Context Usage
+     ⛁ ⛀ ⛁ ⛁ ⛀ ⛀ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   Sonnet 4.6
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   claude-sonnet-4-6
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   17.6k/1m tokens (2%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   Estimated usage by category
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ System prompt: 7.6k tokens (0.8%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ System tools: 8.7k tokens (0.9%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ Skills: 1.1k tokens (0.1%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ Messages: 124 tokens (0.0%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛶ Free space: 982.4k (98.2%)
+
+     MCP tools · /mcp (loaded on-demand)
+     └ 6 tools · 0 tokens
+
+     Skills · /skills
+     └ 13 skills · 1.1k tokens
+
+     /context all to expand
+	 
+
+
+
+
+
+
+
+
+/usage
+   Settings  Status   Config   Usage   Stats
+
+   Session
+
+   Total cost:            $0.0000
+   Total duration (API):  0s
+   Total duration (wall): 17m 46s
+   Total code changes:    0 lines added, 0 lines removed
+   Usage:                 0 input, 0 output, 0 cache read, 0 cache write
+
+   Current session
+                                                      0% used
+
+   Current week (all models)
+   ▌                                                  1% used
+   Resets Jun 23, 11:59pm (America/Santiago)
+
+   What's contributing to your limits usage?
+   Approximate, based on local sessions on this machine — does not include other devices or claude.ai
+
+   Last 24h · these are independent characteristics of your usage, not a breakdown
+
+   Nothing over 10% in this period — try the other window.
+
+   d to day · w to week
+
+   Usage credits
+   Usage credits are off · /usage-credits to turn them on
+
+   Esc to cancel	 
+   
+   
+   
+########################################################
+La app funcionando:
+
+※ recap: App de búsqueda de territorios en Chile por rango de temperatura está construida y corriendo en localhost:8501. Próximo paso: probar el flujo completo en el navegador con La Higuera, período 2023, rango 10–22°C. (disable recaps in /config)
+
+❯ /context
+  ⎿  Context Usage
+     ⛁ ⛀ ⛁ ⛁ ⛀ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛁ ⛶ ⛶ ⛶   Sonnet 4.6
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   claude-sonnet-4-6
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   79.6k/1m tokens (8%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   Estimated usage by category
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ System prompt: 7.6k tokens (0.8%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ System tools: 9.4k tokens (0.9%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ Skills: 1.1k tokens (0.1%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛁ Messages: 61.6k tokens (6.2%)
+     ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶ ⛶   ⛶ Free space: 920.4k (92.0%)
+
+     MCP tools · /mcp (loaded on-demand)
+     └ 8 tools · 0 tokens
+
+     Skills · /skills
+     └ 13 skills · 1.1k tokens
+
+     /context all to expand
+                                                                  ~80k uncached · /clear to start fresh
+───────────────────────────────────────────────────────────────────────── territorio-temp-search-fish ──   
+
+/usage
+
+ Session
+                                                                                                   Total cost:            $3.41
+   Total duration (API):  11m 9s
+   Total duration (wall): 5h 33m 59s
+   Total code changes:    1273 lines added, 80 lines removed
+   Usage by model:                                                                                            claude-haiku-4-5:  1.3k input, 41 output, 0 cache read, 0 cache write ($0.0015)                       claude-opus-4-8:  4.7k input, 13.0k output, 191.9k cache read, 88.2k cache write ($1.33)
+      claude-sonnet-4-6:  1.9k input, 27.9k output, 2.9m cache read, 133.2k cache write ($2.09)
+
+   Current session
+                                                      0% used
+
+   Current week (all models)
+   █▌                                                 3% used
+   Resets Jun 23, 11:59pm (America/Santiago)
+
+   What's contributing to your limits usage?
+   Approximate, based on local sessions on this machine — does not include other devices or claude.ai
+
+   Last 24h · these are independent characteristics of your usage, not a breakdown
+
+   Nothing over 10% in this period — try the other window.
+
+   d to day · w to week
+
+   Usage credits
+   Usage credits are off · /usage-credits to turn them on
+
+   Esc to cancel

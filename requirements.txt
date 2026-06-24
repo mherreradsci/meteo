@@ -1,0 +1,10 @@
+streamlit>=1.35
+streamlit-folium>=0.20
+folium>=0.16
+requests>=2.31
+requests-cache>=1.2
+pandas>=2.2
+geopandas>=0.14
+shapely>=2.0
+plotly>=5.20
+branca>=0.7
