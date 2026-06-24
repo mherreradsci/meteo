@@ -134,6 +134,8 @@ if "geometria" not in st.session_state:
     st.session_state.geometria = None
 if "nombre_territorio" not in st.session_state:
     st.session_state.nombre_territorio = ""
+if "last_clicked" not in st.session_state:
+    st.session_state.last_clicked = None
 
 if ejecutar:
     # ── Validaciones ────────────────────────────────────────────────────────
@@ -205,6 +207,7 @@ if ejecutar:
     st.session_state.puntos = puntos
     st.session_state.geometria = geom
     st.session_state.nombre_territorio = nombre_terr
+    st.session_state.last_clicked = None  # Resetear clic al analizar nuevo territorio
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Visualización de resultados
@@ -227,15 +230,19 @@ if st.session_state.resultados is not None:
         st.subheader("🗺️ Mapa de temperatura")
         m = mapa.crear_mapa(df, st.session_state.geometria, nombre_terr)
         mapa_data = st_folium(m, height=500, use_container_width=True)
+        # st_folium resetea last_clicked cuando el mapa se recrea; lo persistimos manualmente
+        if mapa_data and mapa_data.get("last_clicked"):
+            st.session_state.last_clicked = mapa_data["last_clicked"]
 
     with col_graf:
         st.subheader("📈 Serie temporal")
 
-        # Selección del punto: el último clic en el mapa, o el punto central
+        # Selección del punto: el último clic persistido en session_state, o el punto central
         punto_seleccionado = None
-        if mapa_data and mapa_data.get("last_clicked"):
-            lat_click = mapa_data["last_clicked"]["lat"]
-            lon_click = mapa_data["last_clicked"]["lng"]
+        last_clicked = st.session_state.last_clicked
+        if last_clicked:
+            lat_click = last_clicked["lat"]
+            lon_click = last_clicked["lng"]
             # Encontrar el punto más cercano en la grilla
             dists = df.apply(
                 lambda r: (r["lat"] - lat_click)**2 + (r["lon"] - lon_click)**2,
@@ -244,8 +251,8 @@ if st.session_state.resultados is not None:
             idx_cercano = dists.idxmin()
             punto_seleccionado = idx_cercano
             st.caption(
-                f"Punto seleccionado: ({df.loc[idx_cercano,'lat']:.3f}, "
-                f"{df.loc[idx_cercano,'lon']:.3f})"
+                f"Punto seleccionado: ({df.loc[idx_cercano,'lat']:.4f}, "
+                f"{df.loc[idx_cercano,'lon']:.4f})"
             )
         else:
             # Por defecto: punto con temperatura media más representativa
@@ -259,7 +266,7 @@ if st.session_state.resultados is not None:
             serie_df = st.session_state.series[punto_seleccionado]
             fila = df.loc[punto_seleccionado]
             titulo_serie = (
-                f"Lat {fila['lat']:.3f} | Lon {fila['lon']:.3f} — "
+                f"Lat {fila['lat']:.4f} | Lon {fila['lon']:.4f} — "
                 f"{'✅ Apto' if fila.get('apto') else '❌ No apto'}"
             )
             fig_serie = graficos.serie_temporal(
