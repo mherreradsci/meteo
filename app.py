@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
+from typing import cast
 
 # Asegurar que src/ está en el path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
@@ -51,15 +52,17 @@ with st.sidebar:
     )
 
     # ── Entrada comuna ──────────────────────────────────────────────────────
+    nombre_comuna: str | None = None
+    cut_comuna: int | None = None
+    tipo_id: str = ""
+    coords_raw: str = ""
     if modo == "Por comuna":
         st.subheader("📍 Búsqueda por comuna")
         tipo_id = st.radio("Identificar por", ["Nombre", "Código CUT"], horizontal=True)
         if tipo_id == "Nombre":
             nombre_comuna = st.text_input("Nombre de la comuna", value="La Higuera")
-            cut_comuna = None
         else:
-            cut_comuna = st.number_input("Código CUT", min_value=1000, max_value=99999, value=4105)
-            nombre_comuna = None
+            cut_comuna = int(st.number_input("Código CUT", min_value=1000, max_value=99999, value=4105))
     else:
         st.subheader("🗺️ Polígono de coordenadas")
         st.caption(
@@ -151,8 +154,10 @@ if ejecutar:
         try:
             if modo == "Por comuna":
                 if tipo_id == "Nombre":
+                    assert nombre_comuna is not None
                     nombre_terr, geom = geo.geometria_por_nombre(nombre_comuna)
                 else:
+                    assert cut_comuna is not None
                     nombre_terr, geom = geo.geometria_por_codigo(cut_comuna)
             else:
                 # Parsear coordenadas
@@ -263,11 +268,12 @@ if st.session_state.resultados is not None:
             st.caption("Haz clic en un punto del mapa para ver su serie temporal.")
 
         if punto_seleccionado is not None:
-            serie_df = st.session_state.series[punto_seleccionado]
+            series_list = cast(list[pd.DataFrame], st.session_state.series)
+            serie_df = series_list[int(punto_seleccionado)]
             fila = df.loc[punto_seleccionado]
             titulo_serie = (
                 f"Lat {fila['lat']:.4f} | Lon {fila['lon']:.4f} — "
-                f"{'✅ Apto' if fila.get('apto') else '❌ No apto'}"
+                f"{'✅ Apto' if bool(fila.get('apto', False)) else '❌ No apto'}"
             )
             fig_serie = graficos.serie_temporal(
                 serie_df,
