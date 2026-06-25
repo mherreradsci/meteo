@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import logging
 import math
+import time
 from pathlib import Path
 from typing import Iterable
 
@@ -32,6 +33,8 @@ _BASE_URL = "https://archive-api.open-meteo.com/v1/archive"
 _BATCH_SIZE = 50          # puntos por solicitud (límite conservador)
 _DAILY_VARS = "temperature_2m_max,temperature_2m_min,temperature_2m_mean"
 _TIMEZONE = "America/Santiago"
+_BATCH_DELAY = 0.5        # segundos entre lotes para respetar el rate limit
+_MAX_RETRIES = 4          # reintentos ante 429
 
 logger = logging.getLogger(__name__)
 
@@ -87,9 +90,19 @@ def obtener_temperatura_diaria(
         logger.debug("Consultando Open-Meteo: %d puntos, %s → %s",
                      len(lote_puntos), fecha_inicio, fecha_fin)
 
-        response = requests.get(_BASE_URL, params=params, timeout=60)
-        response.raise_for_status()
+        for attempt in range(_MAX_RETRIES + 1):
+            response = requests.get(_BASE_URL, params=params, timeout=60)
+            if response.status_code == 429 and attempt < _MAX_RETRIES:
+                wait = 2 * (2 ** attempt)  # backoff exponencial: 2s, 4s, 8s, 16s
+                logger.warning("429 recibido, reintentando en %.1f s (intento %d/%d)",
+                               wait, attempt + 1, _MAX_RETRIES)
+                time.sleep(wait)
+                continue
+            response.raise_for_status()
+            break
         data = response.json()
+
+        time.sleep(_BATCH_DELAY)
 
         # La API retorna un dict si es un punto, una lista si son varios
         if isinstance(data, dict):
