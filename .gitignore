@@ -14,7 +14,7 @@ __pycache__/
 data/cache/
 
 # Datos pesados (GeoJSON se puede regenerar con scripts/descargar_comunas.py)
-data/comunas_chile.geojson
+#data/comunas_chile.geojson
 
 # Streamlit
 .streamlit/secrets.toml
