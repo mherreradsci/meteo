@@ -11,6 +11,7 @@ from __future__ import annotations
 import logging
 import math
 import time
+from http import HTTPStatus
 from pathlib import Path
 from typing import Iterable
 
@@ -92,9 +93,10 @@ def obtener_temperatura_diaria(
 
         for attempt in range(_MAX_RETRIES + 1):
             response = requests.get(_BASE_URL, params=params, timeout=60)
-            if response.status_code == 429 and attempt < _MAX_RETRIES:
+            if response.status_code == HTTPStatus.TOO_MANY_REQUESTS and attempt < _MAX_RETRIES:
                 wait = 2 * (2 ** attempt)  # backoff exponencial: 2s, 4s, 8s, 16s
-                logger.warning("429 recibido, reintentando en %.1f s (intento %d/%d)",
+                logger.warning("%s recibido, reintentando en %.1f s (intento %d/%d)",
+                               HTTPStatus.TOO_MANY_REQUESTS.phrase,
                                wait, attempt + 1, _MAX_RETRIES)
                 time.sleep(wait)
                 continue
