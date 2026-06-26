@@ -9,12 +9,19 @@ Uso:
 
 from __future__ import annotations
 
+import logging
 import sys
 from pathlib import Path
 from typing import cast
 
 # Asegurar que src/ está en el path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
+
+logging.basicConfig(
+    format="%(levelname)s [%(name)s] %(message)s",
+    level=logging.WARNING,
+)
+logging.getLogger("meteo").setLevel(logging.DEBUG)
 
 import pandas as pd
 import streamlit as st
