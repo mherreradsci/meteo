@@ -60,7 +60,7 @@ with st.sidebar:
         st.subheader("📍 Búsqueda por comuna")
         tipo_id = st.radio("Identificar por", ["Nombre", "Código CUT"], horizontal=True)
         if tipo_id == "Nombre":
-            nombre_comuna = st.text_input("Nombre de la comuna", value="La Higuera")
+            nombre_comuna = st.text_input("Nombre de la comuna", value="Antofagasta")
         else:
             cut_comuna = int(st.number_input("Código CUT", min_value=1000, max_value=99999, value=4105))
     else:
@@ -120,7 +120,7 @@ with st.sidebar:
 
     # ── Botón de análisis ───────────────────────────────────────────────────
     st.divider()
-    ejecutar = st.button("🔍 Analizar territorio", type="primary", use_container_width=True)
+    ejecutar = st.button("🔍 Analizar territorio", type="primary", width="stretch")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Lógica principal
@@ -281,7 +281,7 @@ if st.session_state.resultados is not None:
                 temp_min=st.session_state.get("temp_min_ref"),
                 temp_max=st.session_state.get("temp_max_ref"),
             )
-            st.plotly_chart(fig_serie, use_container_width=True)
+            st.plotly_chart(fig_serie, width="stretch")
 
         # Guardar rango para la próxima renderización
         # (se hace aquí porque el sidebar ya fue ejecutado)
@@ -291,7 +291,7 @@ if st.session_state.resultados is not None:
     # ── Gráfico de distribución territorial ────────────────────────────────
     st.subheader("📊 Distribución territorial")
     fig_dist = graficos.resumen_territorial(df)
-    st.plotly_chart(fig_dist, use_container_width=True)
+    st.plotly_chart(fig_dist, width="stretch")
 
     # ── Tabla de puntos aptos ───────────────────────────────────────────────
     st.subheader("📋 Puntos aptos")
@@ -307,7 +307,7 @@ if st.session_state.resultados is not None:
                 "tmean_periodo": "T prom (°C)",
             })
             .sort_values("T prom (°C)"),
-            use_container_width=True,
+            width="stretch",
         )
         # Descarga CSV
         csv_bytes = aptos.to_csv(index=False).encode()
