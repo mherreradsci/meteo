@@ -23,6 +23,8 @@ logging.basicConfig(
 )
 logging.getLogger("meteo").setLevel(logging.DEBUG)
 
+logger = logging.getLogger(__name__)
+
 import pandas as pd
 import streamlit as st
 from streamlit_folium import st_folium
@@ -33,7 +35,7 @@ from meteo import analisis, clima, geo, graficos, mapa
 # Configuración de la página
 # ─────────────────────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Buscador climático — Piscicultura Chile",
+    page_title="Buscador climático",
     page_icon="🐟",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -72,14 +74,20 @@ with st.sidebar:
             cut_comuna = int(st.number_input("Código CUT", min_value=1000, max_value=99999, value=4105))
     else:
         st.subheader("🗺️ Polígono de coordenadas")
-        st.caption(
-            "Ingresa pares lat,lon separados por líneas. "
-            "Mínimo 3 puntos. Ejemplo:\n-29.0,-71.5\n-29.5,-71.5\n-29.5,-71.0\n-29.0,-71.0"
+        st.markdown(
+            "Ingresa pares lat,lon (counterclockwise) separados por líneas. "
+            "Mínimo 3 puntos. Ejemplo:\n"
+            "```\n"
+            "-24.3030,-70.5289\n"
+            "-24.5030,-70.5289\n"
+            "-24.5030,-70.2289\n"
+            "-24.3030,-70.2289\n"
+            "```"
         )
         coords_raw = st.text_area(
             "Coordenadas (lat,lon)",
             height=160,
-            placeholder="-29.0,-71.5\n-29.5,-71.5\n-29.5,-71.0\n-29.0,-71.0",
+            placeholder="-24.3030,-70.5289\n-24.5030,-70.5289\n-24.5030,-70.2289\n-24.3030,-70.2289",
         )
 
     # ── Fechas ──────────────────────────────────────────────────────────────
@@ -89,16 +97,16 @@ with st.sidebar:
     with col1:
         fecha_inicio = st.date_input(
             "Inicio",
-            value=datetime.date(2023, 1, 1),
+            value=datetime.date(2025, 1, 1),
             min_value=datetime.date(1940, 1, 1),
-            max_value=datetime.date(2024, 12, 31),
+            max_value=datetime.date(2026, 12, 31),
         )
     with col2:
         fecha_fin = st.date_input(
             "Término",
-            value=datetime.date(2023, 12, 31),
+            value=datetime.date(2025, 12, 31),
             min_value=datetime.date(1940, 1, 1),
-            max_value=datetime.date(2024, 12, 31),
+            max_value=datetime.date(2026, 12, 31),
         )
 
     # ── Rango de temperatura deseado ────────────────────────────────────────
@@ -107,7 +115,7 @@ with st.sidebar:
         "Rango [mín, máx]",
         min_value=-10.0,
         max_value=40.0,
-        value=(10.0, 22.0),
+        value=(10.0, 32.0),
         step=0.5,
     )
     st.caption(
@@ -175,7 +183,9 @@ if ejecutar:
                     if len(partes) != 2:
                         raise ValueError(f"Formato inválido: '{linea}'. Usa 'lat,lon'.")
                     coords.append((float(partes[0]), float(partes[1])))
+                logger.debug("Coord(len=%d): %s", len(coords), coords)
                 geom = geo.poligono_desde_coordenadas(coords)
+                logger.debug("Geometría creada: %s", geom)
                 nombre_terr = "Polígono personalizado"
         except Exception as e:
             st.error(f"❌ Error al resolver el territorio: {e}")

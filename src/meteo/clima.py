@@ -88,9 +88,14 @@ def obtener_temperatura_diaria(
             "timezone": _TIMEZONE,
         }
 
+        logger.debug("Params(len=%d):%s",
+                     len(lote_puntos), params)
+
+
         logger.debug("Consultando Open-Meteo: %d puntos, %s → %s",
                      len(lote_puntos), fecha_inicio, fecha_fin)
 
+        data = {}
         for attempt in range(_MAX_RETRIES + 1):
             response = requests.get(_BASE_URL, params=params, timeout=60)
             if response.status_code == HTTPStatus.TOO_MANY_REQUESTS and attempt < _MAX_RETRIES:
