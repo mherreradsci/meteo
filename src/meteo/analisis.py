@@ -28,6 +28,13 @@ def agregar_puntos(
     -------
     pd.DataFrame con columnas:
         lat, lon, tmin_periodo, tmax_periodo, tmean_periodo, datos_ok
+
+    Notas
+    -----
+    ``tmean_periodo`` es la media aritmética de los valores ``tmean`` diarios
+    (cada uno representa el promedio de las 24 temperaturas horarias ERA5 de
+    ese día).  Es una "media de medias" válida mientras el rango de fechas sea
+    continuo y sin huecos, lo que garantiza la API de Open-Meteo.
     """
     filas = []
     for (lat, lon), df in zip(puntos, series):
