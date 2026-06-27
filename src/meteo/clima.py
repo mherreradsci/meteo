@@ -88,9 +88,7 @@ def obtener_temperatura_diaria(
             "timezone": _TIMEZONE,
         }
 
-        logger.debug("Params(len=%d):%s",
-                     len(lote_puntos), params)
-
+        logger.debug("Params(len=%d):%s", len(params), params)
 
         logger.debug("Consultando Open-Meteo: %d puntos, %s → %s",
                      len(lote_puntos), fecha_inicio, fecha_fin)
@@ -115,6 +113,9 @@ def obtener_temperatura_diaria(
         if isinstance(data, dict):
             data = [data]
 
+        logger.debug("\n\ndata: %s\n\n", data)
+
+
         for j, item in enumerate(data):
             idx = lote_indices[j]
             daily = item.get("daily", {})
@@ -131,6 +132,9 @@ def obtener_temperatura_diaria(
             )
             df = df.set_index("fecha")
             resultados[idx] = df
+            
+            logger.debug("resultados:  %s", resultados)
+
 
     # Rellenar huecos (en caso de fallo en algún lote)
     return [df if df is not None else pd.DataFrame(columns=["tmin", "tmax", "tmean"])
