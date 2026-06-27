@@ -47,7 +47,7 @@ data/
 **Key data contracts:**
 
 - `geo.muestrear_grilla()` → `list[(lat, lon)]`
-- `clima.obtener_temperatura_diaria()` → `list[pd.DataFrame]` (one per point, columns: `tmin`, `tmax`, `tmean`, DatetimeTZ index in `America/Santiago`)
+- `clima.obtener_temperatura_diaria()` → `list[pd.DataFrame]` (one per point, columns: `tmin`, `tmax`, `tmean` — where `tmean` is the ERA5 24-hour hourly mean for that day; DatetimeTZ index in `America/Santiago`)
 - `analisis.agregar_puntos()` → `pd.DataFrame` with columns: `lat`, `lon`, `tmin_periodo`, `tmax_periodo`, `tmean_periodo`, `datos_ok`
 - `analisis.filtrar_aptos()` → same DataFrame with added `apto` (bool) column
 
