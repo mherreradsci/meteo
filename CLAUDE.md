@@ -46,6 +46,10 @@ data/
 
 **Key data contracts:**
 
+- `geo.comunas_disponibles()` → `pd.DataFrame` with columns `[cod_comuna, nombre_comuna]`
+- `geo.geometria_por_codigo(cut)` → `tuple[str, Shapely geometry]` (nombre, geometría)
+- `geo.geometria_por_nombre(nombre)` → `tuple[str, Shapely geometry]` (nombre, geometría)
+- `geo.poligono_desde_coordenadas(coords)` → `Polygon` (coords are `list[(lat, lon)]`)
 - `geo.muestrear_grilla()` → `list[(lat, lon)]`
 - `clima.obtener_temperatura_diaria()` → `list[pd.DataFrame]` (one per point, columns: `tmin`, `tmax`, `tmean` — where `tmean` is the ERA5 24-hour hourly mean for that day; DatetimeTZ index in `America/Santiago`)
 - `analisis.agregar_puntos()` → `pd.DataFrame` with columns: `lat`, `lon`, `tmin_periodo`, `tmax_periodo`, `tmean_periodo`, `datos_ok`
@@ -56,6 +60,7 @@ data/
 - Open-Meteo Archive API (`archive-api.open-meteo.com/v1/archive`) is free and requires no key.
 - The API accepts bulk requests: multiple lat/lon lists in a single call. Returns a list of dicts when multiple points are sent, a single dict when only one point is sent — `clima.py` normalises this difference.
 - Responses are cached in SQLite via `requests_cache` (7-day TTL) to avoid redundant API calls during development.
+- Rate limiting: on HTTP 429, `clima.py` retries up to 4 times with exponential backoff (2 s, 4 s, 8 s, 16 s). A 0.5 s delay is added between every batch to stay within the API's rate limit.
 
 **Aptitude criterion:**
 A point is *apto* if `tmin_periodo >= temp_min AND tmax_periodo <= temp_max` (i.e., no day ever left the desired range). Points with missing data (`datos_ok == False`) are always non-apto.
